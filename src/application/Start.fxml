@@ -6,7 +6,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <children>
-      <Button fx:id="startButton" layoutX="233.0" layoutY="172.0" mnemonicParsing="false" onAction="#startButtonClicked" onMouseClicked="#startButtonClicked" prefHeight="76.0" prefWidth="140.0" text="召喚桌寵">
+      <Button fx:id="startButton" layoutX="233.0" layoutY="172.0" mnemonicParsing="false" onAction="#startButtonClicked" prefHeight="76.0" prefWidth="140.0" text="召喚桌寵">
          <font>
             <Font name="System Bold" size="24.0" />
          </font></Button>

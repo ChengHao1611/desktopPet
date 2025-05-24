@@ -13,6 +13,7 @@ public class Controller {
     public void startButtonClicked(ActionEvent e) {
     	Stage startStage = (Stage) startButton.getScene().getWindow();
     	startStage.close();
-    	System.out.println("Start button clicked, closing the start window.");
+    	PetWindow petWindow = new PetWindow();
+    	petWindow.show();
     }
 }
