@@ -1,8 +1,9 @@
 package application;
 
 import javafx.fxml.FXML;
-import havafx.event.ActionEvent;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 public class Controller {
 
@@ -12,6 +13,6 @@ public class Controller {
     public void startButtonClicked(ActionEvent e) {
     	Stage startStage = (Stage) startButton.getScene().getWindow();
     	startStage.close();
-    	// TODO - show pet scene
+    	System.out.println("Start button clicked, closing the start window.");
     }
 }
