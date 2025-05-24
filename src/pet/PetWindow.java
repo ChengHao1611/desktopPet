@@ -1,4 +1,4 @@
-package application;
+package pet;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
