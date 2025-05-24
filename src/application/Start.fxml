@@ -2,10 +2,13 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <children>
-      <Button layoutX="283.0" layoutY="200.0" mnemonicParsing="false" text="Button" />
+      <Button fx:id="startButton" layoutX="233.0" layoutY="172.0" mnemonicParsing="false" onMouseClicked="#startButtonClicked" prefHeight="76.0" prefWidth="140.0" text="召喚桌寵">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font></Button>
    </children>
 </AnchorPane>
