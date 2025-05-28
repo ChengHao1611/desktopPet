@@ -46,6 +46,17 @@ public class PetWindow {
 
             petController = new PetController(petImage); // 初始化寵物控制器
 
+          //點擊右鍵關閉桌寵
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem closeItem = new MenuItem("關閉桌寵");
+            closeItem.setOnAction(e -> stage.close());
+            contextMenu.getItems().add(closeItem);
+
+            petImage.setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.SECONDARY) {
+                    contextMenu.show(petImage, event.getScreenX(), event.getScreenY());
+                }
+            });
             
             stage.show();
         });
