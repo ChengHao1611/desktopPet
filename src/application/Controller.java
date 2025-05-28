@@ -1,8 +1,10 @@
 package application;
 
 import javafx.fxml.FXML;
-import havafx.event.ActionEvent;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
+import pet.PetWindow;
 
 public class Controller {
 
@@ -12,6 +14,7 @@ public class Controller {
     public void startButtonClicked(ActionEvent e) {
     	Stage startStage = (Stage) startButton.getScene().getWindow();
     	startStage.close();
-    	// TODO - show pet scene
+    	PetWindow petWindow = new PetWindow();
+    	petWindow.show();
     }
 }
