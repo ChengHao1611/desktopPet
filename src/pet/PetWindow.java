@@ -11,7 +11,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class PetWindow {
-
+	PetStage petStage = PetStage.WALK; // 寵物狀態
+	
     public void show() {
         Platform.runLater(() -> {
             // 建立寵物圖片
