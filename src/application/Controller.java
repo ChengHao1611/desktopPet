@@ -17,9 +17,10 @@ public class Controller {
     public void startButtonClicked(ActionEvent e) {
     	// build the pet scene
     	Stage startStage = (Stage) startButton.getScene().getWindow();
-    	startStage.close();
+    	//startStage.close();
     	PetWindow petWindow = new PetWindow();
-    	petWindow.show();
+    	Thread petThread = new Thread(petWindow);
+    	petThread.start(); // 啟動桌寵視窗執行緒
     }
     
     @FXML
