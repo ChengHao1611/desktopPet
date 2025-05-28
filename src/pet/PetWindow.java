@@ -17,7 +17,7 @@ public class PetWindow {
         Platform.runLater(() -> {
             // 建立寵物圖片
             ImageView petImage = new ImageView(new Image(
-                PetWindow.class.getResource("/image/pikachu_1.png").toExternalForm()
+                PetWindow.class.getResource("/image/pikachu/walk/1.png").toExternalForm()
             ));
             petImage.setPreserveRatio(true); //?
             petImage.setFitWidth(120);//?
@@ -43,7 +43,9 @@ public class PetWindow {
             
          // 加入點擊事件
             petImage.setOnMouseClicked(event -> {
-            	stage.close(); // 點擊後關閉視窗
+            	petImage.setImage(new Image(
+					PetWindow.class.getResource("/image/pikachu/walk/2.png").toExternalForm()
+				)); // 點擊後更換圖片
                 System.out.println("🐾 桌寵被點擊了！");
             });
 
