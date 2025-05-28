@@ -2,8 +2,11 @@ package pet;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
@@ -11,7 +14,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class PetWindow {
-	PetStage petStage = PetStage.WALK; // 寵物狀態
+	private PetController petController; // 寵物控制器
 	
     public void show() {
         Platform.runLater(() -> {
@@ -40,15 +43,10 @@ public class PetWindow {
             double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
             stage.setX(screenWidth - 150);
             stage.setY(screenHeight - 180);
-            
-         // 加入點擊事件
-            petImage.setOnMouseClicked(event -> {
-            	petImage.setImage(new Image(
-					PetWindow.class.getResource("/image/pikachu/walk/2.png").toExternalForm()
-				)); // 點擊後更換圖片
-                System.out.println("🐾 桌寵被點擊了！");
-            });
 
+            petController = new PetController(petImage); // 初始化寵物控制器
+
+            
             stage.show();
         });
     }
