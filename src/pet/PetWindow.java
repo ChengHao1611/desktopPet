@@ -13,10 +13,13 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class PetWindow {
+public class PetWindow implements Runnable {
+	
+	//private StageController stageController; // 狀態控制器
+	//private PetStage petStage; // 寵物狀態
 	private PetController petController; // 寵物控制器
 	
-    public void show() {
+    public void run() {
         Platform.runLater(() -> {
             // 建立寵物圖片
             ImageView petImage = new ImageView(new Image(
