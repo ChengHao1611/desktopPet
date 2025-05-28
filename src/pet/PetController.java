@@ -5,7 +5,7 @@ import javafx.scene.image.ImageView;
 
 public class PetController {
 	private PetStage petStage;
-	private ImageView petImage = null;
+	private ImageView petImage;
 	
 	public PetController(ImageView petImage) {
 		this.petStage = PetStage.WALK; // 初始狀態為 WALK
