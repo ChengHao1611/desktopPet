@@ -1,6 +1,7 @@
 package pet;
 
 
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
@@ -13,6 +14,8 @@ public class PetController {
 	private ImageView petImage;
 	private Stage petWindow; // 寵物狀態
 	private String petName;
+	private AnimationTimer animationTimer; // 動畫計時器
+	private boolean nextStage = true; // 是否切換到下一個狀態
 	
 	public PetController(ImageView petImage, Stage petWindow, String petName) {
 		this.petStage = PetStage.WALK; // 初始狀態為 WALK
@@ -20,80 +23,80 @@ public class PetController {
 		this.petWindow = petWindow;
 		this.petName = petName;
 		
-		 // 加入點擊事件
-	    petImage.setOnMouseClicked(event -> {
-	    	
-	    	petImage.setImage(new Image(
-				PetWindow.class.getResource("/image/pikachu/walk/2.png").toExternalForm()
-			)); // 點擊後更換圖片
-	        System.out.println("🐾 桌寵被點擊了！");
-	    });
+		animationTimer = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				petStage = PetStage.WALK; // 取得狀態
+				if(!nextStage) return;
+				nextStage = false; // 重置為 false，等待下一次觸發
+				
+				switch (petStage) {
+					case WALK:
+						petWalk();
+						break;
+					case CLIMB:
+						petImage.setImage(new Image(
+							PetController.class.getResource("/image/"+petName+"/climb/1.png").toExternalForm()
+						));
+						break;
+					case SUSPENSION:
+						petImage.setImage(new Image(
+							PetController.class.getResource("/image/"+petName+"/suspension/1.png").toExternalForm()
+						));
+						break;
+					case FALL:
+						petImage.setImage(new Image(
+							PetController.class.getResource("/image/"+petName+"/fall/1.png").toExternalForm()
+						));
+						break;
+					case STUMBLE:
+						petImage.setImage(new Image(
+							PetController.class.getResource("/image/"+petName+"/stumble/1.png").toExternalForm()
+						));
+						break;
+					case SIT:
+						petImage.setImage(new Image(
+							PetController.class.getResource("/image/"+petName+"/sit/1.png").toExternalForm()
+						));
+						break;
+					case DRAG:
+						petImage.setImage(new Image(
+							PetController.class.getResource("/image/"+petName+"/drag/1.png").toExternalForm()
+						));
+						break;
+					case IDLE:
+						petImage.setImage(new Image(
+							PetController.class.getResource("/image/"+petName+"/idle/1.png").toExternalForm()
+						));
+						break;
+				}
+			}
+		};
 	}
 
-	public void show() {
-		int i = 0; // 用於循環控制
-		while(i < 4) {
-			i++;
-			petStage = PetStage.WALK; // 取得狀態
-			
-			switch (petStage) {
-				case WALK:
-					petWalk();
-					break;
-				case CLIMB:
-					petImage.setImage(new Image(
-						PetController.class.getResource("/image/"+petName+"/climb/1.png").toExternalForm()
-					));
-					break;
-				case SUSPENSION:
-					petImage.setImage(new Image(
-						PetController.class.getResource("/image/"+petName+"/suspension/1.png").toExternalForm()
-					));
-					break;
-				case FALL:
-					petImage.setImage(new Image(
-						PetController.class.getResource("/image/"+petName+"/fall/1.png").toExternalForm()
-					));
-					break;
-				case STUMBLE:
-					petImage.setImage(new Image(
-						PetController.class.getResource("/image/"+petName+"/stumble/1.png").toExternalForm()
-					));
-					break;
-				case SIT:
-					petImage.setImage(new Image(
-						PetController.class.getResource("/image/"+petName+"/sit/1.png").toExternalForm()
-					));
-					break;
-				case DRAG:
-					petImage.setImage(new Image(
-						PetController.class.getResource("/image/"+petName+"/drag/1.png").toExternalForm()
-					));
-					break;
-				case IDLE:
-					petImage.setImage(new Image(
-						PetController.class.getResource("/image/"+petName+"/idle/1.png").toExternalForm()
-					));
-					break;
-			}
-		}
+	public void start() {
+		animationTimer.start(); // 啟動動畫計時器
 	}
-	//bug：無法顯示圖片
+
 	private void petWalk() {
+	    // 建立 Timeline 動畫
 		Timeline timeline = new Timeline();
 	    for (int i = 0; i < 4; i++) {
-	        int frameIndex = i + 1;
+	        final int frameIndex = i + 1;
 	        timeline.getKeyFrames().add(new KeyFrame(
-	            Duration.millis(200 * (frameIndex-1)), // 在200 * (frameIndex-1)毫秒時執行event
+	            Duration.millis(200 * (frameIndex - 1)), // 在200 * (frameIndex-1)毫秒時執行event
 	            event -> {  
 	                petImage.setImage(new Image(
 	                    PetController.class.getResource("/image/" + petName + "/walk/" + frameIndex + ".png").toExternalForm()
 	                ));
-	                petWindow.setX(petWindow.getX() - 1); // 每次移動10像素
+	                petWindow.setX(petWindow.getX() - 2); // 每次移動1像素
 	            }
 	        ));
 	    }
-	    timeline.setCycleCount(3); // 只執行一次
+	    timeline.setCycleCount(1); // 只執行一次
+	    timeline.setOnFinished(e -> {
+	        nextStage = true; // ✅動畫播放完畢後才允許進入下一階段
+	    });
 	    timeline.play(); // 開始動畫
 	}
 
