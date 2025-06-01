@@ -64,7 +64,7 @@ public class PetWindow implements Runnable {
     public void run() {
         Platform.runLater(() -> {
             stage.show();
-            petController.show(); // 顯示寵物狀態
+            petController.start(); // 顯示寵物狀態
         });
     }
 }
