@@ -1,8 +1,12 @@
 package pet;
 
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class PetController {
 	private PetStage petStage;
@@ -19,22 +23,22 @@ public class PetController {
 		 // 加入點擊事件
 	    petImage.setOnMouseClicked(event -> {
 	    	
-//	    	petImage.setImage(new Image(
-//				PetWindow.class.getResource("/image/pikachu/walk/2.png").toExternalForm()
-//			)); // 點擊後更換圖片
+	    	petImage.setImage(new Image(
+				PetWindow.class.getResource("/image/pikachu/walk/2.png").toExternalForm()
+			)); // 點擊後更換圖片
 	        System.out.println("🐾 桌寵被點擊了！");
 	    });
 	}
 
 	public void show() {
-		while(true) {
+		int i = 0; // 用於循環控制
+		while(i < 4) {
+			i++;
 			petStage = PetStage.WALK; // 取得狀態
 			
 			switch (petStage) {
 				case WALK:
-					petImage.setImage(new Image(
-						PetController.class.getResource("/image/"+petName+"/walk/1.png").toExternalForm()
-					));
+					petWalk();
 					break;
 				case CLIMB:
 					petImage.setImage(new Image(
@@ -73,6 +77,24 @@ public class PetController {
 					break;
 			}
 		}
+	}
+	//bug：無法顯示圖片
+	private void petWalk() {
+		Timeline timeline = new Timeline();
+	    for (int i = 0; i < 4; i++) {
+	        int frameIndex = i + 1;
+	        timeline.getKeyFrames().add(new KeyFrame(
+	            Duration.millis(200 * (frameIndex-1)), // 在200 * (frameIndex-1)毫秒時執行event
+	            event -> {  
+	                petImage.setImage(new Image(
+	                    PetController.class.getResource("/image/" + petName + "/walk/" + frameIndex + ".png").toExternalForm()
+	                ));
+	                petWindow.setX(petWindow.getX() - 1); // 每次移動10像素
+	            }
+	        ));
+	    }
+	    timeline.setCycleCount(3); // 只執行一次
+	    timeline.play(); // 開始動畫
 	}
 
 }
