@@ -14,16 +14,15 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class PetWindow implements Runnable {
-	
-	//private StageController stageController; // 狀態控制器
-	//private PetStage petStage; // 寵物狀態
+
 	private PetController petController; // 寵物控制器
+	private String petName = "pikachu"; // 寵物名稱，要從controller傳入
 	
     public void run() {
         Platform.runLater(() -> {
             // 建立寵物圖片
             ImageView petImage = new ImageView(new Image(
-                PetWindow.class.getResource("/image/pikachu/walk/1.png").toExternalForm()
+                PetWindow.class.getResource("/image/"+petName+"/walk/1.png").toExternalForm()
             ));
             petImage.setPreserveRatio(true); //?
             petImage.setFitWidth(120);//?
@@ -47,7 +46,7 @@ public class PetWindow implements Runnable {
             stage.setX(screenWidth - 150);
             stage.setY(screenHeight - 180);
 
-            petController = new PetController(petImage); // 初始化寵物控制器
+            petController = new PetController(petImage,stage,petName); // 初始化寵物控制器
 
           //點擊右鍵關閉桌寵
             ContextMenu contextMenu = new ContextMenu();
