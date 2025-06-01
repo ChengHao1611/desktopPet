@@ -20,9 +20,6 @@ public class PetController {
 	        System.out.println("🐾 桌寵被點擊了！");
 	    });
 	}
-	
-	public void setPetStage(PetStage petStage) {
-		this.petStage = petStage;
-	}
 
+	//private void 
 }
