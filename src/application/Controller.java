@@ -35,7 +35,7 @@ public class Controller {
     	// build up the checkBoxList
     	ObservableList<CheckBox> tmpList = FXCollections.observableArrayList();
     	
-    	File mainDir = new File("../image");
+    	File mainDir = new File("src/image");
     	File[] subDirs = mainDir.listFiles(File::isDirectory);
     	if (subDirs == null) {
     		System.out.println("該路徑下並不存在資料夾");
