@@ -53,7 +53,7 @@ public class PetWindow implements Runnable {
       //點擊右鍵關閉桌寵
         ContextMenu contextMenu = new ContextMenu();
         MenuItem closeItem = new MenuItem("關閉桌寵");
-        closeItem.setOnAction(e -> stage.close());
+        closeItem.setOnAction(e -> petWindowclose());
         contextMenu.getItems().add(closeItem);
 
         petImage.setOnMouseClicked(event -> {
@@ -69,5 +69,10 @@ public class PetWindow implements Runnable {
             petController.start(); // 顯示寵物狀態
         });
     }
+    
+    public void petWindowclose() {
+		petController.stop(); // 停止寵物狀態
+		stage.close(); // 關閉寵物視窗
+	}
 }
 

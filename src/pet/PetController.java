@@ -65,6 +65,10 @@ public class PetController {
 	public void start() {
 		animationTimer.start(); // 啟動動畫計時器
 	}
+	
+	public void stop() {
+		animationTimer.stop(); // 停止動畫計時器
+	}
 
 	// x, y 參數用於調整寵物視窗位置, millis 參數用於設定每一幀的時間間隔
 	private void action(int pictureNum, String state, int x, int y, int millis) {
