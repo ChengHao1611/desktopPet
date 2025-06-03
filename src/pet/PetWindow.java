@@ -17,7 +17,7 @@ public class PetWindow implements Runnable {
 
 	private PetController petController; // 寵物控制器
 	private String petName; // 寵物名稱，要從controller傳入
-	private Stage stage; // 寵物視窗
+	public Stage stage; // 寵物視窗
 	
 	public PetWindow(String petName) {
 		

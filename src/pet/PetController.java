@@ -16,12 +16,14 @@ public class PetController {
 	private String petName;
 	private AnimationTimer animationTimer; // 動畫計時器
 	private boolean nextStage = true; // 是否切換到下一個狀態
+	private PetPictureNumber petPictureNumber; // 寵物圖片數量
 	
 	public PetController(ImageView petImage, Stage petWindow, String petName) {
 		this.petStage = PetStage.WALK; // 初始狀態為 WALK
 		this.petImage = petImage;
 		this.petWindow = petWindow;
 		this.petName = petName;
+		this.petPictureNumber = new PetPictureNumber(petName); // 初始化寵物圖片數量
 		
 		animationTimer = new AnimationTimer() {
 			@Override
@@ -81,7 +83,7 @@ public class PetController {
 	private void petWalk() {
 	    // 建立 Timeline 動畫
 		Timeline timeline = new Timeline();
-	    for (int i = 0; i < 4; i++) {
+	    for (int i = 0; i < petPictureNumber.walk; i++) {
 	        final int frameIndex = i + 1;
 	        timeline.getKeyFrames().add(new KeyFrame(
 	            Duration.millis(200 * (frameIndex - 1)), // 在200 * (frameIndex-1)毫秒時執行event
