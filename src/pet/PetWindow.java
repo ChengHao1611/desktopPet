@@ -16,10 +16,12 @@ import javafx.stage.StageStyle;
 public class PetWindow implements Runnable {
 
 	private PetController petController; // 寵物控制器
-	private String petName = "pikachu"; // 寵物名稱，要從controller傳入
+	private String petName; // 寵物名稱，要從controller傳入
 	private Stage stage; // 寵物視窗
 	
-	public PetWindow() {
+	public PetWindow(String petName) {
+		
+		this.petName = petName; // 設定寵物名稱
 		// 建立寵物圖片
         ImageView petImage = new ImageView(new Image(
             PetWindow.class.getResource("/image/"+petName+"/walk/1.png").toExternalForm()

@@ -22,7 +22,7 @@ public class Controller {
 
     @FXML
     public void startButtonClicked(ActionEvent e) {
-    	PetWindow petWindow = new PetWindow();
+    	PetWindow petWindow = new PetWindow("pikachu"); // 這裡可以改成從選擇的 CheckBox 中取得名稱
     	Thread petThread = new Thread(petWindow);
     	petThread.start(); // 啟動桌寵視窗執行緒
     }
