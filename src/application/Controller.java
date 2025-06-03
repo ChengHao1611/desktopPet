@@ -51,5 +51,15 @@ public class Controller {
     		tmpList.add(new CheckBox(folder.getName()));
     	}
     	selectDesktopPet.setItems(tmpList);
+    	
+    	// creating a persistent listener
+    	Platform.runLater(() ->{
+    		Stage stage = (Stage) startButton.getScene().getWindow();
+        	stage.setOnCloseRequest(event -> {
+        		for (PetWindow pet : pets) {
+        			pet.petWindowclose();
+        		}
+        	});
+    	});
     }
 }
