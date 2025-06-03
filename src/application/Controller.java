@@ -3,7 +3,10 @@ package application;
 import javafx.fxml.FXML;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,12 +22,18 @@ public class Controller {
     private Button startButton;
     @FXML
     private ListView<CheckBox> selectDesktopPet;
+    private List<PetWindow> pets = new ArrayList<>(); // every pets
 
     @FXML
     public void startButtonClicked(ActionEvent e) {
-    	PetWindow petWindow = new PetWindow("pikachu"); // 這裡可以改成從選擇的 CheckBox 中取得名稱
-    	Thread petThread = new Thread(petWindow);
-    	petThread.start(); // 啟動桌寵視窗執行緒
+    	for (CheckBox checkbox : selectDesktopPet.getItems()) {
+			if (checkbox.isSelected()) {
+				PetWindow petWindow = new PetWindow(checkbox.getText()); // 取得選中的寵物名稱
+				Thread petThread = new Thread(petWindow);
+				petThread.start(); // 啟動桌寵視窗執行緒
+				pets.add(petWindow); // add the pet into list
+			}
+    	}
     }
     
     @FXML
