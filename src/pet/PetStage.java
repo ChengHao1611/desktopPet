@@ -7,7 +7,8 @@ public enum PetStage {
 	LEFT_CLIMB_DOWN,
 	RIGHT_CLIMB_UP,
 	RIGHT_CLIMB_DOWN,
-	SUSPENSION, //懸掛
+	LEFT_SUSPENSION, 
+	RIGHT_SUSPENSION, //懸掛
 	FALL,       //下降
 	STUMBLE,    //絆倒
 	SIT,        //坐下
