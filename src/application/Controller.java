@@ -17,18 +17,25 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import pet.PetWindow;
 
 public class Controller {
 
 	@FXML
-    private Button startButton;
+    private Button startButton, newButton, editButton, clearButton;
     @FXML
     private ListView<CheckBox> selectDesktopPet;
+    @FXML
+    private VBox VBox = new VBox(10);
+    
     private List<PetWindow> pets = new ArrayList<>(); // every pets
     private Set<String> petNames = new HashSet<>(); // to avoid generating same pet.
     private boolean hasAlerted = false;
+    private ToggleGroup group = new ToggleGroup(); // group radio buttons
 
     @FXML
     public void startButtonClicked(ActionEvent e) {
@@ -49,12 +56,12 @@ public class Controller {
 				}
 			}
     	}
-    	hasAlerted = false; // reset alert flag after checking all checkboxes
+    	hasAlerted = false; // reset alert flag after checking all checkBoxes
     }
     
     @FXML
     public void initialize() {
-    	// build up the checkBoxList
+    	// build up the checkBoxList in summon page
     	ObservableList<CheckBox> tmpList = FXCollections.observableArrayList();
     	
     	File mainDir = new File("src/image");
@@ -65,10 +72,13 @@ public class Controller {
     	}
     	for (File folder : subDirs) {
     		tmpList.add(new CheckBox(folder.getName()));
+    		RadioButton radioButton = new RadioButton(folder.getName());
+    		radioButton.setToggleGroup(group);
+    		VBox.getChildren().add(radioButton);
     	}
     	selectDesktopPet.setItems(tmpList);
     	
-    	// creating a persistent listener
+    	// a persistent listener to take actions when the window is closed
     	Platform.runLater(() ->{
     		Stage stage = (Stage) startButton.getScene().getWindow();
         	stage.setOnCloseRequest(event -> {
@@ -77,5 +87,31 @@ public class Controller {
         		}
         	});
     	});
+    	
+    	// the listener for radio buttons
+    	group.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+    		editButton.setDisable(newValue == null);
+    		clearButton.setDisable(newValue == null);
+    		if (newValue != null) {
+    			RadioButton selectedRadioButton = (RadioButton) newValue;
+    			String selectedPetName = selectedRadioButton.getText();
+    		}
+    	});
+    	editButton.setDisable(true); // initialize editButton state
+    	clearButton.setDisable(true); // initialize clearButton state
+    }
+    
+    @FXML
+    public void clearButtonClicked(ActionEvent e) {
+    	// clear the selected radio button
+    	group.selectToggle(null);
+    }
+    
+    public void editButtonClicked(ActionEvent e) {
+    	
+    }
+    
+    public void newButtonClicked(ActionEvent e) {
+    	
     }
 }
