@@ -38,28 +38,43 @@ public class PetController {
 				
 				switch (petStage) {
 					case LEFT_WALK:
-						action(petPictureNumber.walk, "walk", -2, 0, 200); // 呼叫 petWalk 方法
+						action(petPictureNumber.walk, "walk", -2, 0, 200, 1); // 呼叫 petWalk 方法
+						break;
+					case RIGHT_WALK:
+						action(petPictureNumber.walk, "walk", 2, 0, 200, -1); // 呼叫 petWalk 方法
 						break;
 					case LEFT_CLIMB_UP:
-						action(petPictureNumber.climb, "climb", 0, -2, 200); // 呼叫 petClimb 方法
+						action(petPictureNumber.climb, "climb", 0, -2, 200, 1); // 呼叫 petClimb 方法
 						break;
-					case SUSPENSION:
-						action(petPictureNumber.suspension, "suspension", 2, 0, 200); // 呼叫 petSuspension 方法
+					case LEFT_CLIMB_DOWN:
+						action(petPictureNumber.climb, "climb", 0, 2, 200, 1); // 呼叫 petClimb 方法
+						break;
+					case RIGHT_CLIMB_UP:
+						action(petPictureNumber.climb, "climb", 0, -2, 200, -1); // 呼叫 petClimb 方法
+						break;
+					case RIGHT_CLIMB_DOWN:
+						action(petPictureNumber.climb, "climb", 0, 2, 200, -1); // 呼叫 petClimb 方法
+						break;
+					case LEFT_SUSPENSION:
+						action(petPictureNumber.suspension, "suspension", -2, 0, 200, -1); // 呼叫 petSuspension 方法
+						break;
+					case RIGHT_SUSPENSION:
+						action(petPictureNumber.suspension, "suspension", 2, 0, 200, 1); // 呼叫 petSuspension 方法
 						break;
 					case FALL:
-						action(petPictureNumber.fall, "fall", 0, 2, 200); // 呼叫 petFall 方法
+						action(petPictureNumber.fall, "fall", 0, 2, 200, 1); // 呼叫 petFall 方法
 						break;
 					case STUMBLE:
-						action(petPictureNumber.stumble, "stumble", 0, 0, 200); // 呼叫 petStumble 方法
+						action(petPictureNumber.stumble, "stumble", 0, 0, 200, 1); // 呼叫 petStumble 方法
 						break;
 					case SIT:
-						action(petPictureNumber.sit, "sit", 0, 0, 200); // 呼叫 petSit 方法
+						action(petPictureNumber.sit, "sit", 0, 0, 200, 1); // 呼叫 petSit 方法
 						break;
 					case DRAG:
-						action(petPictureNumber.drag, "drag", 0, 0, 200); // 呼叫 petDrag 方法
+						action(petPictureNumber.drag, "drag", 0, 0, 200, 1); // 呼叫 petDrag 方法
 						break;
 					case IDLE:
-						action(petPictureNumber.idle, "idle", 0, 0, 700); // 呼叫 petIdle 方法
+						action(petPictureNumber.idle, "idle", 0, 0, 700, 1); // 呼叫 petIdle 方法
 						break;
 				}
 			}
@@ -75,7 +90,7 @@ public class PetController {
 	}
 
 	// x, y 參數用於調整寵物視窗位置, millis 參數用於設定每一幀的時間間隔
-	private void action(int pictureNum, String state, int x, int y, int millis) {
+	private void action(int pictureNum, String state, int x, int y, int millis, int reverse) {
 	    // 建立 Timeline 動畫
 		Timeline timeline = new Timeline();
 	    for (int i = 0; i < pictureNum; i++) {
@@ -86,6 +101,7 @@ public class PetController {
 	                petImage.setImage(new Image(
 	                    PetController.class.getResource("/image/" + petName + "/" + state + "/" + frameIndex + ".png").toExternalForm()
 	                ));
+	                petImage.setScaleX(reverse); // 反轉圖片
 	                petWindow.setX(petWindow.getX() + x);
 	                petWindow.setY(petWindow.getY() + y); // 更新寵物視窗位置
 	            }
