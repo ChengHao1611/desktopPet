@@ -17,6 +17,7 @@ public class PetController {
 	private AnimationTimer animationTimer; // 動畫計時器
 	private boolean nextStage = true; // 是否切換到下一個狀態
 	private PetPictureNumber petPictureNumber; // 寵物圖片數量
+	private StageController controller; // 狀態控制器
 	
 	public PetController(ImageView petImage, Stage petWindow, String petName) {
 		this.petStage = PetStage.WALK; // 初始狀態為 WALK
@@ -24,13 +25,16 @@ public class PetController {
 		this.petWindow = petWindow;
 		this.petName = petName;
 		this.petPictureNumber = new PetPictureNumber(petName); // 初始化寵物圖片數量
+		controller = new StageController(petWindow); // 初始化狀態控制器
+        controller.start(); // 啟動狀態更新邏輯
 		
 		animationTimer = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				petStage = PetStage.WALK; // 取得狀態
 				if(!nextStage) return;
 				nextStage = false; // 重置為 false，等待下一次觸發
+				petStage = controller.getCurrentStage(); // 更新狀態控制器的當前狀態
+				System.out.println("Current Stage: " + petStage); // 印出目前狀態
 				
 				switch (petStage) {
 					case WALK:

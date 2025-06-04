@@ -1,8 +1,12 @@
 package pet;
 
 public enum PetStage {
-	WALK,
-	CLIMB,
+	LEFT_WALK,
+	RIGHT_WALK,
+	LEFT_CLIMB_UP,
+	LEFT_CLIMB_DOWN,
+	RIGHT_CLIMB_UP,
+	RIGHT_CLIMB_DOWN,
 	SUSPENSION, //懸掛
 	FALL,       //下降
 	STUMBLE,    //絆倒
