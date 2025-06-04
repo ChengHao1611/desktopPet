@@ -66,26 +66,26 @@ public class StageController {
         }
     }
 
-    private double screenWidth() {
+    public double screenWidth() {
         return javafx.stage.Screen.getPrimary().getVisualBounds().getWidth();
     }
-    private double screenHeight() {
+    public double screenHeight() {
         return javafx.stage.Screen.getPrimary().getVisualBounds().getHeight();
     }
 
-    private boolean isAtLeftEdge() {
+    public boolean isAtLeftEdge() {
         return window.getX() <= 0;
     }
 
-    private boolean isAtRightEdge() {
+    public boolean isAtRightEdge() {
         return window.getX() + window.getWidth() >= screenWidth();
     }
 
-    private boolean isAtTopEdge() {
+    public boolean isAtTopEdge() {
         return window.getY() <= 0;
     }
 
-    private boolean isAtBottomEdge() {
+    public boolean isAtBottomEdge() {
         return window.getY() + window.getHeight() >= screenHeight();
     }
 
@@ -162,7 +162,7 @@ public class StageController {
                     return (Math.random() < 0.5)? PetStage.RIGHT_CLIMB_DOWN : PetStage.RIGHT_CLIMB_UP;
             }
         }else if (isAtTopEdge()) { // 上界
-            if (isTimeChangeStage()){
+            if (isTimeChangeStage() || currentStage == PetStage.DRAG) {
                 double left_p = (tendToMoveLeft)? 0.7 : 0.3;
                 return (Math.random() < left_p)? PetStage.LEFT_SUSPENSION : PetStage.RIGHT_SUSPENSION;
             }

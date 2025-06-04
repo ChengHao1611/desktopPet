@@ -127,6 +127,7 @@ public class PetController {
 	                petImage.setScaleX(reverse); // 反轉圖片
 	                petWindow.setX(petWindow.getX() + x);
 	                petWindow.setY(petWindow.getY() + y); // 更新寵物視窗位置
+	                detectPetLocation(); // 檢測寵物位置，確保不會超出螢幕邊界
 	            }
 	        ));
 	    }
@@ -136,6 +137,24 @@ public class PetController {
 	        nextStage = true; // ✅動畫播放完畢後才允許進入下一階段
 	    });
 	    timeline.play(); // 開始播放動畫
+	}
+	
+	private void detectPetLocation() {
+		if(controller.isAtLeftEdge()) {
+			petWindow.setX(0); // 設定寵物視窗在左邊
+		}
+		
+		if(controller.isAtRightEdge()) {
+			petWindow.setX(controller.screenWidth() - petWindow.getWidth()); // 設定寵物視窗在右邊
+		}
+		
+		if(controller.isAtTopEdge()) {
+			petWindow.setY(0); // 設定寵物視窗在上邊
+		}
+		
+		if(controller.isAtBottomEdge()) {
+			petWindow.setY(controller.screenHeight() - petWindow.getHeight()); // 設定寵物視窗在下邊
+		}
 	}
 
 }
