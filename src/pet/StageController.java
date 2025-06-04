@@ -13,6 +13,7 @@ public class StageController {
     private long currentStageStartTime;
     private long timeStep = 100;
     private DragHandler dragHandler;
+    private boolean tendToMoveLeft = false;
 
     public StageController(Stage window) {
         this.window = window;
@@ -90,6 +91,7 @@ public class StageController {
 
     private boolean isTimeChangeStage() {
         long elapsedMillis = System.currentTimeMillis() - currentStageStartTime;
+        if (currentStage == PetStage.STUMBLE) return elapsedMillis >= 500;
         return elapsedMillis >= 5000 && Math.random() < 0.3;
     }
 
@@ -97,33 +99,88 @@ public class StageController {
         if (dragHandler != null && dragHandler.isDragging()) {
             return PetStage.DRAG;
         }
-        if (isAtTopEdge() && (isAtLeftEdge() || isAtRightEdge())) {
-            if(isTimeChangeStage() && currentStage == PetStage.LEFT_CLIMB_UP) return PetStage.SUSPENSION;
-            if(isTimeChangeStage() && currentStage == PetStage.SUSPENSION) return PetStage.LEFT_CLIMB_UP;
-            if(currentStage != PetStage.LEFT_CLIMB_UP && currentStage != PetStage.SUSPENSION){
-                double r = Math.random();
-                return (r < 0.5)? PetStage.LEFT_CLIMB_UP : PetStage.SUSPENSION;
+        if (isAtTopEdge() && (isAtLeftEdge() || isAtRightEdge())) { // 左上角或右上角
+            if(isTimeChangeStage()){
+                switch (currentStage) {
+                    case PetStage.LEFT_CLIMB_UP:
+                        tendToMoveLeft = false;
+                        return PetStage.RIGHT_SUSPENSION;
+                    case PetStage.RIGHT_CLIMB_UP:
+                        tendToMoveLeft = true;
+                        return PetStage.LEFT_SUSPENSION;
+                    case PetStage.LEFT_SUSPENSION:
+                        return PetStage.LEFT_CLIMB_DOWN;
+                    case PetStage.RIGHT_SUSPENSION:
+                        return PetStage.RIGHT_CLIMB_DOWN;
+                    default:
+                        break;
+                }
             }
-        }else if (isAtBottomEdge() && (isAtLeftEdge() || isAtRightEdge())) {
-            if(isTimeChangeStage() && currentStage == PetStage.LEFT_CLIMB_UP) return PetStage.LEFT_WALK;
-            if(isTimeChangeStage() && currentStage == PetStage.LEFT_WALK) return PetStage.LEFT_CLIMB_UP;
-            if(currentStage != PetStage.LEFT_CLIMB_UP && currentStage != PetStage.LEFT_WALK){
-                double r = Math.random();
-                return (r < 0.5)? PetStage.LEFT_CLIMB_UP : PetStage.LEFT_WALK;
+            if (currentStage == PetStage.DRAG){
+                if (isAtLeftEdge()){ // 左上
+                    return (Math.random() < 0.5)? PetStage.LEFT_CLIMB_DOWN : PetStage.RIGHT_SUSPENSION;
+                }else{ // 右上
+                    return (Math.random() < 0.5)? PetStage.RIGHT_CLIMB_DOWN : PetStage.LEFT_SUSPENSION;
+                }
             }
-        }else if (isAtLeftEdge() || isAtRightEdge()) {
-            return PetStage.LEFT_CLIMB_UP;
-        }else if (isAtTopEdge()) {
-            return PetStage.SUSPENSION;
-        }else if (!isAtBottomEdge()) {
+        }else if (isAtBottomEdge() && (isAtLeftEdge() || isAtRightEdge())) { // 左下角或右下角
+            if(isTimeChangeStage()){
+                switch (currentStage) {
+                    case PetStage.LEFT_CLIMB_DOWN:
+                        return PetStage.RIGHT_WALK;
+                    case PetStage.RIGHT_CLIMB_DOWN:
+                        return PetStage.LEFT_WALK;
+                    case PetStage.LEFT_WALK:
+                        return PetStage.LEFT_CLIMB_UP;
+                    case PetStage.RIGHT_WALK:
+                        return PetStage.RIGHT_CLIMB_UP;
+                    default:
+                        break;
+                }
+            }
+            if (currentStage == PetStage.DRAG){
+                if (isAtLeftEdge()){ // 左下
+                    return (Math.random() < 0.5)? PetStage.LEFT_CLIMB_UP : PetStage.RIGHT_WALK;
+                }else{ // 右下
+                    return (Math.random() < 0.5)? PetStage.RIGHT_CLIMB_UP : PetStage.LEFT_WALK;
+                }
+            }
+        }else if (isAtLeftEdge()) { // 左界
+            switch (currentStage){
+                case PetStage.LEFT_CLIMB_DOWN:
+                case PetStage.LEFT_CLIMB_UP:
+                    return currentStage;
+                default:
+                    return (Math.random() < 0.5)? PetStage.LEFT_CLIMB_DOWN : PetStage.LEFT_CLIMB_UP;
+            }
+        }else if (isAtRightEdge()) { // 右界
+            switch (currentStage){
+                case PetStage.RIGHT_CLIMB_DOWN:
+                case PetStage.RIGHT_CLIMB_UP:
+                    return currentStage;
+                default:
+                    return (Math.random() < 0.5)? PetStage.RIGHT_CLIMB_DOWN : PetStage.RIGHT_CLIMB_UP;
+            }
+        }else if (isAtTopEdge()) { // 上界
+            if (isTimeChangeStage()){
+                double left_p = (tendToMoveLeft)? 0.7 : 0.3;
+                return (Math.random() < left_p)? PetStage.LEFT_SUSPENSION : PetStage.RIGHT_SUSPENSION;
+            }
+        }else if (!isAtBottomEdge()) { // 中間 (沒接觸到邊界)
             return PetStage.FALL;
-        }else if (isTimeChangeStage() || currentStage == PetStage.DRAG) {
-            double r = Math.random();
-            if (r < 0.1) return (currentStage == PetStage.LEFT_WALK)? PetStage.STUMBLE : PetStage.LEFT_WALK;
-            else if (r < 0.4) return PetStage.SIT;
-            else if(r < 0.7) return PetStage.IDLE;
-            else return PetStage.LEFT_WALK;
+        }else{ // 下界
+            if (currentStage == PetStage.FALL) return PetStage.STUMBLE;
+            if (isTimeChangeStage() || currentStage == PetStage.DRAG) {
+                double r = Math.random();
+                if (Math.random() < 0.5){
+                    return (Math.random() < 0.5)? PetStage.SIT : PetStage.IDLE;
+                }else{
+                    double left_p = (tendToMoveLeft)? 0.7 : 0.3;
+                    return (Math.random() < left_p)? PetStage.LEFT_WALK : PetStage.RIGHT_WALK;
+                }
+            }
         }
+        
         return currentStage;
     }
 
