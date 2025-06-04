@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,18 +18,27 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 import pet.PetWindow;
 
 public class Controller {
 
 	@FXML
-    private Button startButton;
+    private Button startButton, newButton, editButton, clearButton;
     @FXML
     private ListView<CheckBox> selectDesktopPet;
+    @FXML
+    private ListView<RadioButton> listViewForRadioButton;
+    @FXML
+    private TextField newFolderName;
+    
     private List<PetWindow> pets = new ArrayList<>(); // every pets
     private Set<String> petNames = new HashSet<>(); // to avoid generating same pet.
     private boolean hasAlerted = false;
+    private ToggleGroup group = new ToggleGroup(); // group radio buttons
 
     @FXML
     public void startButtonClicked(ActionEvent e) {
@@ -49,13 +59,14 @@ public class Controller {
 				}
 			}
     	}
-    	hasAlerted = false; // reset alert flag after checking all checkboxes
+    	hasAlerted = false; // reset alert flag after checking all checkBoxes
     }
     
     @FXML
-    public void initialize() {
-    	// build up the checkBoxList
+    public void refreshListView() {
+    	// build up the checkBoxList in summon page
     	ObservableList<CheckBox> tmpList = FXCollections.observableArrayList();
+    	ObservableList<RadioButton> tmpRadioButtonList = FXCollections.observableArrayList();
     	
     	File mainDir = new File("src/image");
     	File[] subDirs = mainDir.listFiles(File::isDirectory);
@@ -65,10 +76,19 @@ public class Controller {
     	}
     	for (File folder : subDirs) {
     		tmpList.add(new CheckBox(folder.getName()));
+    		RadioButton radioButton = new RadioButton(folder.getName());
+    		radioButton.setToggleGroup(group);
+    		tmpRadioButtonList.add(radioButton);
     	}
     	selectDesktopPet.setItems(tmpList);
+    	listViewForRadioButton.setItems(tmpRadioButtonList);
+    }
+    
+    @FXML
+    public void initialize() {
+    	refreshListView();
     	
-    	// creating a persistent listener
+    	// a persistent listener to take actions when the window is closed
     	Platform.runLater(() ->{
     		Stage stage = (Stage) startButton.getScene().getWindow();
         	stage.setOnCloseRequest(event -> {
@@ -77,5 +97,65 @@ public class Controller {
         		}
         	});
     	});
+    	
+    	// the listener for radio buttons
+    	group.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+    		editButton.setDisable(newValue == null);
+    		clearButton.setDisable(newValue == null);
+    		if (newValue != null) {
+    			RadioButton selectedRadioButton = (RadioButton) newValue;
+    			String selectedPetName = selectedRadioButton.getText();
+    		}
+    	});
+    	editButton.setDisable(true); // initialize editButton state
+    	clearButton.setDisable(true); // initialize clearButton state
+    	newButton.disableProperty().bind(Bindings.createBooleanBinding(
+    		    () -> newFolderName.getText().trim().isEmpty(),
+    		    newFolderName.textProperty()
+    		)); // avoid pushing the newButton without the folder name that need to be created
+    }
+    
+    @FXML
+    public void clearButtonClicked(ActionEvent e) {
+    	// clear the selected radio button
+    	group.selectToggle(null);
+    }
+    
+    public void editButtonClicked(ActionEvent e) {
+    	// TODO : create a new scene to show the actions of pet
+    }
+    
+    public void newButtonClicked(ActionEvent e) {
+    	String folderName = newFolderName.getText().trim();
+    	File newFolder = new File("src/image/" + folderName);
+    	if (!newFolder.exists()) {
+    		// build folders
+    		File walkDir = new File("src/image/" + folderName + "/walk");
+        	File climbDir = new File("src/image/" + folderName + "/climb");
+        	File dragDir = new File("src/image/" + folderName + "/drag");
+        	File fallDir = new File("src/image/" + folderName + "/fall");
+        	File idleDir = new File("src/image/" + folderName + "/idle");
+        	File sitDir = new File("src/image/" + folderName + "/sit");
+        	File stumbleDir = new File("src/image/" + folderName + "/stumble");
+        	File suspensionDir = new File("src/image/" + folderName + "/suspension");
+        	
+        	walkDir.mkdirs();
+        	climbDir.mkdirs();
+        	dragDir.mkdirs();
+        	fallDir.mkdirs();
+        	idleDir.mkdirs();
+        	sitDir.mkdirs();
+        	stumbleDir.mkdirs();
+        	suspensionDir.mkdirs();
+        	refreshListView(); // refresh VBox and listView
+        	// TODO : create a new scene to show the actions of pet
+    	} else {
+    		Alert alert = new Alert(AlertType.WARNING);
+		    alert.setTitle("警告");
+		    alert.setHeaderText("注意！");
+		    alert.setContentText("該名稱之桌寵已存在！");
+		    alert.show();
+    	}
+    	newFolderName.clear(); // clear the text field after creating folder
     }
 }
