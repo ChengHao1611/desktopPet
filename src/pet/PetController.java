@@ -31,9 +31,10 @@ public class PetController {
 		animationTimer = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				petStage = PetStage.WALK; // 取得狀態
 				if(!nextStage) return;
 				nextStage = false; // 重置為 false，等待下一次觸發
+				petStage = controller.getCurrentStage(); // 更新狀態控制器的當前狀態
+				System.out.println("Current Stage: " + petStage); // 印出目前狀態
 				
 				switch (petStage) {
 					case WALK:
@@ -108,7 +109,6 @@ public class PetController {
 	        nextStage = true; // ✅動畫播放完畢後才允許進入下一階段
 	    });
 	    timeline.play(); // 開始動畫
-	    petStage = controller.getCurrentStage(); // 更新狀態控制器的當前狀態
 	}
 
 }
