@@ -20,7 +20,7 @@ public class PetController {
 	private StageController controller; // 狀態控制器
 	
 	public PetController(ImageView petImage, Stage petWindow, String petName) {
-		this.petStage = PetStage.WALK; // 初始狀態為 WALK
+		this.petStage = PetStage.LEFT_WALK; // 初始狀態為 WALK
 		this.petImage = petImage;
 		this.petWindow = petWindow;
 		this.petName = petName;
@@ -37,10 +37,10 @@ public class PetController {
 				System.out.println("Current Stage: " + petStage); // 印出目前狀態
 				
 				switch (petStage) {
-					case WALK:
+					case LEFT_WALK:
 						action(petPictureNumber.walk, "walk", -2, 0, 200); // 呼叫 petWalk 方法
 						break;
-					case CLIMB:
+					case LEFT_CLIMB_UP:
 						action(petPictureNumber.climb, "climb", 0, -2, 200); // 呼叫 petClimb 方法
 						break;
 					case SUSPENSION:
