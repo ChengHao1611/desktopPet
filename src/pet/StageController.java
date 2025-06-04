@@ -98,31 +98,31 @@ public class StageController {
             return PetStage.DRAG;
         }
         if (isAtTopEdge() && (isAtLeftEdge() || isAtRightEdge())) {
-            if(isTimeChangeStage() && currentStage == PetStage.CLIMB) return PetStage.SUSPENSION;
-            if(isTimeChangeStage() && currentStage == PetStage.SUSPENSION) return PetStage.CLIMB;
-            if(currentStage != PetStage.CLIMB && currentStage != PetStage.SUSPENSION){
+            if(isTimeChangeStage() && currentStage == PetStage.LEFT_CLIMB_UP) return PetStage.SUSPENSION;
+            if(isTimeChangeStage() && currentStage == PetStage.SUSPENSION) return PetStage.LEFT_CLIMB_UP;
+            if(currentStage != PetStage.LEFT_CLIMB_UP && currentStage != PetStage.SUSPENSION){
                 double r = Math.random();
-                return (r < 0.5)? PetStage.CLIMB : PetStage.SUSPENSION;
+                return (r < 0.5)? PetStage.LEFT_CLIMB_UP : PetStage.SUSPENSION;
             }
         }else if (isAtBottomEdge() && (isAtLeftEdge() || isAtRightEdge())) {
-            if(isTimeChangeStage() && currentStage == PetStage.CLIMB) return PetStage.WALK;
-            if(isTimeChangeStage() && currentStage == PetStage.WALK) return PetStage.CLIMB;
-            if(currentStage != PetStage.CLIMB && currentStage != PetStage.WALK){
+            if(isTimeChangeStage() && currentStage == PetStage.LEFT_CLIMB_UP) return PetStage.LEFT_WALK;
+            if(isTimeChangeStage() && currentStage == PetStage.LEFT_WALK) return PetStage.LEFT_CLIMB_UP;
+            if(currentStage != PetStage.LEFT_CLIMB_UP && currentStage != PetStage.LEFT_WALK){
                 double r = Math.random();
-                return (r < 0.5)? PetStage.CLIMB : PetStage.WALK;
+                return (r < 0.5)? PetStage.LEFT_CLIMB_UP : PetStage.LEFT_WALK;
             }
         }else if (isAtLeftEdge() || isAtRightEdge()) {
-            return PetStage.CLIMB;
+            return PetStage.LEFT_CLIMB_UP;
         }else if (isAtTopEdge()) {
             return PetStage.SUSPENSION;
         }else if (!isAtBottomEdge()) {
             return PetStage.FALL;
         }else if (isTimeChangeStage() || currentStage == PetStage.DRAG) {
             double r = Math.random();
-            if (r < 0.1) return (currentStage == PetStage.WALK)? PetStage.STUMBLE : PetStage.WALK;
+            if (r < 0.1) return (currentStage == PetStage.LEFT_WALK)? PetStage.STUMBLE : PetStage.LEFT_WALK;
             else if (r < 0.4) return PetStage.SIT;
             else if(r < 0.7) return PetStage.IDLE;
-            else return PetStage.WALK;
+            else return PetStage.LEFT_WALK;
         }
         return currentStage;
     }
