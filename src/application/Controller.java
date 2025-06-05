@@ -48,18 +48,27 @@ public class Controller {
     public void startButtonClicked(ActionEvent e) {
     	for (CheckBox checkbox : selectDesktopPet.getItems()) {
 			if (checkbox.isSelected()) {
-				PetWindow petWindow = new PetWindow(checkbox.getText()); // 取得選中的寵物名稱
-				Thread petThread = new Thread(petWindow);
-				if (!petNames.add(checkbox.getText()) && !hasAlerted) { // to avoid generating same pet. 
-					Alert alert = new Alert(AlertType.WARNING);
-				    alert.setTitle("警告");
-				    alert.setHeaderText("注意！");
-				    alert.setContentText("請勿重複添加相同桌寵！");
-				    alert.show();
-				    hasAlerted = true; // set alert flag to true to avoid multiple alerts
+				File petDir = new File("src/image/" + checkbox.getText() + "/walk");
+				if (petDir.isDirectory() && petDir.list() != null && petDir.list().length > 0) {
+					PetWindow petWindow = new PetWindow(checkbox.getText()); // 取得選中的寵物名稱
+					Thread petThread = new Thread(petWindow);
+					if (!petNames.add(checkbox.getText()) && !hasAlerted) { // to avoid generating same pet. 
+						Alert alert = new Alert(AlertType.WARNING);
+					    alert.setTitle("警告");
+					    alert.setHeaderText("注意！");
+					    alert.setContentText("請勿重複添加相同桌寵！");
+					    alert.show();
+					    hasAlerted = true; // set alert flag to true to avoid multiple alerts
+					} else {
+						pets.add(petWindow); // add pet into list
+						petThread.start(); // 啟動桌寵視窗執行緒
+					}
 				} else {
-					pets.add(petWindow); // add pet into list
-					petThread.start(); // 啟動桌寵視窗執行緒
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("警告");
+					alert.setHeaderText("注意！");
+					alert.setContentText("該桌寵資料夾不存在或資料夾內沒有圖片！");
+					alert.show();
 				}
 			}
     	}
