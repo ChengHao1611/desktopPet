@@ -74,19 +74,19 @@ public class StageController {
     }
 
     public boolean isAtLeftEdge() {
-        return window.getX() <= 0;
+        return window.getX() <= 0 + 1;
     }
 
     public boolean isAtRightEdge() {
-        return window.getX() + window.getWidth() >= screenWidth();
+        return window.getX() + window.getWidth() >= screenWidth() - 1;
     }
 
     public boolean isAtTopEdge() {
-        return window.getY() <= 0;
+        return window.getY() <= 0 + 1;
     }
 
     public boolean isAtBottomEdge() {
-        return window.getY() + window.getHeight() >= screenHeight();
+        return window.getY() >= screenHeight() - window.getHeight() - 1;
     }
 
     private boolean isTimeChangeStage() {
