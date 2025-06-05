@@ -1,6 +1,7 @@
 package application;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -39,6 +42,7 @@ public class Controller {
     private Set<String> petNames = new HashSet<>(); // to avoid generating same pet.
     private boolean hasAlerted = false;
     private ToggleGroup group = new ToggleGroup(); // group radio buttons
+    private String selectedPetName = "";
 
     @FXML
     public void startButtonClicked(ActionEvent e) {
@@ -104,15 +108,17 @@ public class Controller {
     		clearButton.setDisable(newValue == null);
     		if (newValue != null) {
     			RadioButton selectedRadioButton = (RadioButton) newValue;
-    			String selectedPetName = selectedRadioButton.getText();
+    			selectedPetName = selectedRadioButton.getText();
     		}
     	});
     	editButton.setDisable(true); // initialize editButton state
     	clearButton.setDisable(true); // initialize clearButton state
+    	
+    	// if there is no folder name in the textField, it will disable to push the newButton
     	newButton.disableProperty().bind(Bindings.createBooleanBinding(
     		    () -> newFolderName.getText().trim().isEmpty(),
     		    newFolderName.textProperty()
-    		)); // avoid pushing the newButton without the folder name that need to be created
+    		));
     }
     
     @FXML
@@ -121,10 +127,26 @@ public class Controller {
     	group.selectToggle(null);
     }
     
-    public void editButtonClicked(ActionEvent e) {
-    	// TODO : create a new scene to show the actions of pet
+    public void openFolder(String folderName) {
+    	try { // open the folder scene
+    		FXMLLoader loader = new FXMLLoader(getClass().getResource("EditScene.fxml"));
+        	Parent root = loader.load();
+        	Scene scene = new Scene(root);
+        	Stage stage = new Stage();
+        	stage.setScene(scene);
+        	stage.setTitle(folderName);
+        	stage.show();
+    	} catch (Exception e) {
+			e.printStackTrace();
+    	}
     }
     
+    @FXML
+    public void editButtonClicked(ActionEvent e) {
+    	openFolder(selectedPetName);
+    }
+    
+    @FXML
     public void newButtonClicked(ActionEvent e) {
     	String folderName = newFolderName.getText().trim();
     	File newFolder = new File("src/image/" + folderName);
@@ -148,7 +170,8 @@ public class Controller {
         	stumbleDir.mkdirs();
         	suspensionDir.mkdirs();
         	refreshListView(); // refresh VBox and listView
-        	// TODO : create a new scene to show the actions of pet
+
+            openFolder(folderName);
     	} else {
     		Alert alert = new Alert(AlertType.WARNING);
 		    alert.setTitle("警告");
