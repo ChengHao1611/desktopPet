@@ -39,7 +39,7 @@ public class PetController {
 				preStage = petStage; // 更新前一狀態為當前狀態
 				nextStage = false; // 重置為 false，等待下一次觸發
 				petStage = controller.getCurrentStage(); // 更新狀態控制器的當前狀態
-				System.out.println("Current Stage: " + petStage); // 印出目前狀態
+				//System.out.println("Current Stage: " + petStage); // 印出目前狀態
 				
 				switch (petStage) {
 					case LEFT_WALK:
@@ -101,6 +101,7 @@ public class PetController {
 	
 	private int calculatePictureIndex(int pictureCount) {
 		// 計算當前圖片索引
+		if(pictureCount == 0) return 0;
 		return (pictureIndex % pictureCount) + 1; // 循環使用圖片
 	}
 
@@ -114,7 +115,9 @@ public class PetController {
 
 	// x, y 參數用於調整寵物視窗位置, millis 參數用於設定每一幀的時間間隔
 	private void action(int pictureIndex, String state, int x, int y, int millis, int reverse) {
-	    // 建立 Timeline 動畫
+	    if(pictureIndex == 0) return; // 如果圖片索引為0，則不執行任何操作
+		
+		// 建立 Timeline 動畫
 		Timeline timeline = new Timeline();
 	    for (int i = 0; i < 2; i++) {
 	        final int frameIndex = i + 1;
