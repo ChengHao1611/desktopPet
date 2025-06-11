@@ -68,11 +68,11 @@ public class PetController {
 						break;
 					case LEFT_SUSPENSION:
 						pictureIndex = calculatePictureIndex(petPictureNumber.suspension); // 更新圖片索引
-						action(pictureIndex, "suspension", -2, 0, 200, -1); // 呼叫 petSuspension 方法
+						action(pictureIndex, "suspension", -2, 0, 200, 1); // 呼叫 petSuspension 方法
 						break;
 					case RIGHT_SUSPENSION:
 						pictureIndex = calculatePictureIndex(petPictureNumber.suspension); // 更新圖片索引
-						action(pictureIndex, "suspension", 2, 0, 200, 1); // 呼叫 petSuspension 方法
+						action(pictureIndex, "suspension", 2, 0, 200, -1); // 呼叫 petSuspension 方法
 						break;
 					case FALL:
 						pictureIndex = calculatePictureIndex(petPictureNumber.fall); // 更新圖片索引
